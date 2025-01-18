@@ -43,6 +43,31 @@ The application consists of two main parts:
    - Built with React and Material-UI
    - Uses Recharts for sparkline graphs
 
+### Hot Reloading
+
+For a better development experience, you can enable hot reloading for both backend and frontend changes:
+
+#### Backend (Java) Hot Reloading
+1. Run the application with the dev profile:
+   ```bash
+   mvn spring-boot:run -Dspring-boot.run.profiles=dev
+   ```
+2. Install the JRebel plugin in your IDE
+3. Enable JRebel for the project
+4. Run the application with JRebel enabled
+
+#### Frontend Hot Reloading
+1. In one terminal, start the backend:
+   ```bash
+   mvn spring-boot:run
+   ```
+2. In another terminal, navigate to the frontend directory and start the development server:
+   ```bash
+   cd src/main/frontend
+   npm start
+   ```
+3. The frontend will be available at http://localhost:3000 with hot reloading enabled
+
 ## Available Metrics
 
 ### Manager Level Metrics
