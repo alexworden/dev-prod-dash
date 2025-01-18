@@ -11,8 +11,8 @@ import java.util.stream.IntStream;
 @Service
 public class MetricsService {
     private static final String[] MANAGER_METRICS = {
-        "Release Velocity", "P0 and P1 Incidents", "Interaction Latency",
-        "Service Availability", "UI Availability"
+        "Release Frequency", "Lead Time for Changes", "Prod Incidents", "MTTR",
+        "Service Availability", "UI Availability", "UI Latency"
     };
     
     private static final String[] ASSET_METRICS = {

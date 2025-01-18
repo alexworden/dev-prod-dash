@@ -18,23 +18,26 @@ import { KeyboardArrowDown, KeyboardArrowUp } from '@mui/icons-material';
 
 // Manager metrics define the common metrics that appear in both manager and asset rows
 const MANAGER_METRICS = [
-  "Release Velocity",
-  "P0 and P1 Incidents",
-  "Interaction Latency",
+  "Release Frequency",
+  "Lead Time for Changes",
+  "Prod Incidents",
+  "MTTR",
   "Service Availability",
-  "UI Availability"
+  "UI Availability",
+  "UI Latency"
 ];
 
 // Asset metrics include all metrics, with the first few matching manager metrics
 const ASSET_METRICS = [
   // These should align with manager metrics
-  "Release Frequency",     // aligns with Release Velocity
-  "P0 and P1 Incidents",
-  "Interaction Latency",
+  "Release Frequency",
+  "Lead Time for Changes",
+  "Prod Incidents",
+  "MTTR",
   "Service Availability",
   "UI Availability",
+  "UI Latency",
   // Asset-specific metrics
-  "Lead Time For Changes",
   "Code Complexity",
   "PRs Per Release",
   "PR Review Time",

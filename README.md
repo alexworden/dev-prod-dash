@@ -71,16 +71,18 @@ For a better development experience, you can enable hot reloading for both backe
 ## Available Metrics
 
 ### Manager Level Metrics
-- Release Velocity
-- P0 and P1 Incidents
-- Interaction Latency
-- Service Availability
-- UI Availability
-
-### Project Level Metrics
 - Release Frequency
-- Lead Time For Changes
-- Code Complexity
-- P0 and P1 Incidents
+- Lead Time for Changes
+- Prod Incidents
+- MTTR (Mean Time To Recovery)
 - Service Availability
 - UI Availability
+- UI Latency
+
+### Asset Level Metrics
+All manager level metrics plus:
+- Code Complexity
+- PRs Per Release
+- PR Review Time
+- Merge Time
+- Build Time
