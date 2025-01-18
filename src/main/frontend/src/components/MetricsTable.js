@@ -88,16 +88,6 @@ const AssetRow = ({ asset, indent }) => {
           return <TableCell key={metricName} align="center" sx={{ width: '120px' }} />;
         }
 
-        // Special handling for Release Frequency to align with Release Velocity
-        if (metricName === "Release Frequency") {
-          const value = asset.metrics["Release Velocity"] || asset.metrics[metricName];
-          return (
-            <TableCell key={metricName} align="center" sx={{ width: '120px' }}>
-              {value && <SparklineChart data={value.values} />}
-            </TableCell>
-          );
-        }
-        
         // Regular metrics
         const value = asset.metrics[metricName];
         return (
@@ -170,7 +160,7 @@ const ManagerRow = ({ manager, indent = 0 }) => {
           </Typography>
         </TableCell>
         {MANAGER_METRICS.map((metricName, index) => {
-          const value = manager.metrics[metricName === "Release Velocity" ? "Release Velocity" : metricName];
+          const value = manager.metrics[metricName];
           return (
             <TableCell key={metricName} align="center" sx={{ width: '120px' }}>
               {value && <SparklineChart data={value.values} />}

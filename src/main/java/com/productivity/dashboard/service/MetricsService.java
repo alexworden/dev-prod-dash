@@ -16,10 +16,12 @@ public class MetricsService {
     };
     
     private static final String[] ASSET_METRICS = {
-        "Release Frequency", "Lead Time For Changes", "Code Complexity",
-        "P0 and P1 Incidents", "Service Availability", "UI Availability",
-        "PRs Per Release", "PR Review Time (Internal)", "PR Review Time (External)",
-        "Merge Time", "Build Time"
+        // These should align with manager metrics
+        "Release Frequency", "Lead Time for Changes", "Prod Incidents", "MTTR",
+        "Service Availability", "UI Availability", "UI Latency",
+        // Asset-specific metrics
+        "Code Complexity", "PRs Per Release", "PR Review Time (Internal)",
+        "PR Review Time (External)", "Merge Time", "Build Time"
     };
 
     public List<ManagerMetrics> getMetricsData() {
@@ -117,62 +119,93 @@ public class MetricsService {
         data.setMetric(metricName);
         data.setTimeRange("Last 6 months");
         
-        // Generate 6 months of sample data
         List<Double> values = new ArrayList<>();
         Random random = new Random();
         
-        // Generate somewhat realistic looking trends
-        double baseValue = random.nextDouble() * 100;
-        
-        if (metricName.equals("Code Complexity")) {
-            // Generate three sets of values for different complexity levels
-            List<Double> highComplexity = new ArrayList<>();    // >20 cyclomatic complexity
-            List<Double> mediumComplexity = new ArrayList<>();  // 11-20 cyclomatic complexity
-            List<Double> lowComplexity = new ArrayList<>();     // 5-10 cyclomatic complexity
-            
-            // Start with realistic initial values
-            double highBase = random.nextDouble() * 5 + 2;     // 2-7 high complexity items
-            double mediumBase = random.nextDouble() * 10 + 8;   // 8-18 medium complexity items
-            double lowBase = random.nextDouble() * 15 + 10;     // 10-25 low complexity items
-            
-            IntStream.range(0, 6).forEach(i -> {
-                // High complexity should generally decrease or stay low
-                double highVariation = (random.nextDouble() - 0.6) * 2; // Trend downward
-                highComplexity.add(Math.max(0, Math.min(10, highBase + highVariation)));
+        switch (metricName) {
+            case "Lead Time for Changes":
+                // Lead time in days, typically between 1-14 days with occasional spikes
+                double baseLeadTime = random.nextDouble() * 5 + 2; // Base of 2-7 days
+                IntStream.range(0, 6).forEach(i -> {
+                    double variation = (random.nextDouble() - 0.4) * 4; // Slight tendency to improve
+                    values.add(Math.max(1.0, Math.min(14.0, baseLeadTime + variation)));
+                });
+                break;
                 
-                // Medium complexity should fluctuate but generally stay stable
-                double mediumVariation = (random.nextDouble() - 0.5) * 4;
-                mediumComplexity.add(Math.max(0, Math.min(20, mediumBase + mediumVariation)));
+            case "Prod Incidents":
+                // Number of production incidents per month, typically 0-5
+                double baseIncidents = random.nextDouble() * 2 + 1; // Base of 1-3 incidents
+                IntStream.range(0, 6).forEach(i -> {
+                    double variation = (random.nextDouble() - 0.6) * 2; // Trend toward fewer incidents
+                    values.add(Math.max(0.0, Math.min(5.0, baseIncidents + variation)));
+                });
+                break;
                 
-                // Low complexity might increase as code is refactored
-                double lowVariation = (random.nextDouble() - 0.4) * 5; // Slight upward trend
-                lowComplexity.add(Math.max(0, Math.min(30, lowBase + lowVariation)));
-            });
-            
-            // Combine all complexity values
-            values.addAll(highComplexity);
-            values.addAll(mediumComplexity);
-            values.addAll(lowComplexity);
-        } else if (isDualMetric) {
-            // For dual metrics (internal vs external PR times), generate two sets of values
-            List<Double> internalValues = new ArrayList<>();
-            List<Double> externalValues = new ArrayList<>();
-            
-            IntStream.range(0, 6).forEach(i -> {
-                double internalVariation = (random.nextDouble() - 0.5) * 10;
-                double externalVariation = (random.nextDouble() - 0.5) * 20;
-                internalValues.add(Math.max(0, Math.min(100, baseValue + internalVariation)));
-                externalValues.add(Math.max(0, Math.min(100, baseValue * 1.5 + externalVariation)));
-            });
-            
-            // Combine both sets of values
-            values.addAll(internalValues);
-            values.addAll(externalValues);
-        } else {
-            IntStream.range(0, 6).forEach(i -> {
-                double variation = (random.nextDouble() - 0.5) * 20;
-                values.add(Math.max(0, Math.min(100, baseValue + variation)));
-            });
+            case "MTTR":
+                // Mean Time To Recovery in hours, typically between 0.5-8 hours
+                double baseMTTR = random.nextDouble() * 2 + 1; // Base of 1-3 hours
+                IntStream.range(0, 6).forEach(i -> {
+                    double variation = (random.nextDouble() - 0.5) * 2;
+                    values.add(Math.max(0.5, Math.min(8.0, baseMTTR + variation)));
+                });
+                break;
+                
+            case "Code Complexity":
+                // Generate three sets of values for different complexity levels
+                List<Double> highComplexity = new ArrayList<>();    // >20 cyclomatic complexity
+                List<Double> mediumComplexity = new ArrayList<>();  // 11-20 cyclomatic complexity
+                List<Double> lowComplexity = new ArrayList<>();     // 5-10 cyclomatic complexity
+                
+                // Start with realistic initial values
+                double highBase = random.nextDouble() * 5 + 2;     // 2-7 high complexity items
+                double mediumBase = random.nextDouble() * 10 + 8;   // 8-18 medium complexity items
+                double lowBase = random.nextDouble() * 15 + 10;     // 10-25 low complexity items
+                
+                IntStream.range(0, 6).forEach(i -> {
+                    // High complexity should generally decrease or stay low
+                    double highVariation = (random.nextDouble() - 0.6) * 2; // Trend downward
+                    highComplexity.add(Math.max(0, Math.min(10, highBase + highVariation)));
+                    
+                    // Medium complexity should fluctuate but generally stay stable
+                    double mediumVariation = (random.nextDouble() - 0.5) * 4;
+                    mediumComplexity.add(Math.max(0, Math.min(20, mediumBase + mediumVariation)));
+                    
+                    // Low complexity might increase as code is refactored
+                    double lowVariation = (random.nextDouble() - 0.4) * 5; // Slight upward trend
+                    lowComplexity.add(Math.max(0, Math.min(30, lowBase + lowVariation)));
+                });
+                
+                // Combine all complexity values
+                values.addAll(highComplexity);
+                values.addAll(mediumComplexity);
+                values.addAll(lowComplexity);
+                break;
+                
+            default:
+                if (isDualMetric) {
+                    // For dual metrics (internal vs external PR times), generate two sets of values
+                    List<Double> internalValues = new ArrayList<>();
+                    List<Double> externalValues = new ArrayList<>();
+                    double baseValue = random.nextDouble() * 100;
+                    
+                    IntStream.range(0, 6).forEach(i -> {
+                        double internalVariation = (random.nextDouble() - 0.5) * 10;
+                        double externalVariation = (random.nextDouble() - 0.5) * 20;
+                        internalValues.add(Math.max(0, Math.min(100, baseValue + internalVariation)));
+                        externalValues.add(Math.max(0, Math.min(100, baseValue * 1.5 + externalVariation)));
+                    });
+                    
+                    // Combine both sets of values
+                    values.addAll(internalValues);
+                    values.addAll(externalValues);
+                } else {
+                    // For other metrics, generate standard values between 0-100
+                    double baseValue = random.nextDouble() * 100;
+                    IntStream.range(0, 6).forEach(i -> {
+                        double variation = (random.nextDouble() - 0.5) * 20;
+                        values.add(Math.max(0, Math.min(100, baseValue + variation)));
+                    });
+                }
         }
         
         data.setValues(values);
