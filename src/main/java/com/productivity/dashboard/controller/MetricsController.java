@@ -4,6 +4,7 @@ import com.productivity.dashboard.model.ManagerMetrics;
 import com.productivity.dashboard.service.MetricsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -15,7 +16,7 @@ public class MetricsController {
     private MetricsService metricsService;
     
     @GetMapping("/api/metrics")
-    public List<ManagerMetrics> getMetrics() {
-        return metricsService.getMetricsData();
+    public List<ManagerMetrics> getMetrics(@RequestParam(value = "owningManagerId", defaultValue = "D1") String owningManagerId) {
+        return metricsService.getMetricsData(owningManagerId);
     }
 }

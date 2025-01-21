@@ -24,7 +24,7 @@ public class MetricsService {
         "PR Review Time (External)", "Merge Time", "Build Time"
     };
 
-    public List<ManagerMetrics> getMetricsData() {
+    public List<ManagerMetrics> getMetricsData(String owningManagerId) {
         List<ManagerMetrics> directors = new ArrayList<>();
         
         // Generate 2 directors
